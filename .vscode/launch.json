@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "LeetCode: debug active file",
+            "type": "lldb-dap",
+            "request": "launch",
+            "program": "${userHome}/Library/Caches/leetcode_cpp/current",
+            "cwd": "${userHome}/Library/Caches/leetcode_cpp",
+            "preLaunchTask": "LeetCode: build active file"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+-xc++
+-std=c++23
+-stdlib=libc++
+-isysroot/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+-isystem/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
+-Wall
+-Wextra
+-Wshadow
+-DLOCAL
+-Iinclude
+-include
+include/leetcode.h

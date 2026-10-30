@@ -1,0 +1,73 @@
+{
+    "name": "leetcode-buttons",
+    "displayName": "LeetCode Buttons",
+    "description": "Run all tests / debug buttons for the local LeetCode C++ workspace.",
+    "publisher": "local",
+    "version": "0.0.2",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "main": "./extension.js",
+    "activationEvents": [
+        "onLanguage:cpp",
+        "onLanguage:markdown"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "leetcode.runAll",
+                "title": "LeetCode: Run All Tests",
+                "icon": "$(play)"
+            },
+            {
+                "command": "leetcode.runOne",
+                "title": "LeetCode: Run One Test\u2026",
+                "icon": "$(debug-step-into)"
+            },
+            {
+                "command": "leetcode.debug",
+                "title": "LeetCode: Debug\u2026",
+                "icon": "$(debug-alt)"
+            },
+            {
+                "command": "leetcode.openProblem",
+                "title": "LeetCode: Open Problem Description",
+                "icon": "$(book)"
+            },
+            {
+                "command": "leetcode.openTests",
+                "title": "LeetCode: Open Tests",
+                "icon": "$(beaker)"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "leetcode.runAll",
+                    "group": "navigation@0",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                },
+                {
+                    "command": "leetcode.runOne",
+                    "group": "navigation@1",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                },
+                {
+                    "command": "leetcode.debug",
+                    "group": "navigation@2",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                },
+                {
+                    "command": "leetcode.openProblem",
+                    "group": "navigation@3",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                },
+                {
+                    "command": "leetcode.openTests",
+                    "group": "navigation@4",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "C_Cpp.default.cppStandard": "c++23",
+    "lldb-dap.executable-path": "/Library/Developer/CommandLineTools/usr/bin/lldb-dap",
+    "files.exclude": {
+        "**/*.dSYM": true
+    },
+    "C_Cpp.debugShortcut": false,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "*.cpp": "${capture}.test.cpp, ${capture}.md"
+    }
+}
