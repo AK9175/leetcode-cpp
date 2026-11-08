@@ -22,7 +22,8 @@ public:
 
             //Server gets the task.
             while(!free.empty() && left < m && left <= right){
-                long long endtime = right + tasks[left];
+                long long
+                 endtime = right + tasks[left];
                 auto itr = free.top();
                 free.pop();
                 busy.push({endtime, itr.first, itr.second});
