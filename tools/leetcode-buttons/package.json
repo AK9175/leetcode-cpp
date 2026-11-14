@@ -32,7 +32,7 @@
             {
                 "command": "leetcode.analyze",
                 "title": "LeetCode: Analyze",
-                "icon": "$(beaker)"
+                "icon": "$(sparkle)"
             },
             {
                 "command": "leetcode.openProblem",

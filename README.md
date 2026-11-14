@@ -16,6 +16,27 @@ Graphs/Minimum Cost to Reach City With Discounts.test.cpp    <- the local test s
 The `.cpp` holds nothing but the `Solution` class, so it pastes into LeetCode unchanged. The
 `.test.cpp` `#include`s it and supplies `main`.
 
+## Setup
+
+Install the local prerequisites before using the VS Code buttons:
+
+- macOS Clang with C++23 support;
+- VS Code and the `code` command;
+- Claude Code, if using the Claude analysis option;
+- Codex CLI, if using the Codex analysis option.
+
+Authenticate the CLIs through their normal login flows, then run this from the repository root:
+
+```sh
+./tools/leetcode-buttons/build.sh
+```
+
+The build script packages and installs the VS Code extension and synchronizes the shared
+`leetcode-analysis` skill into both `~/.claude/skills/leetcode-analysis/` and
+`~/.codex/skills/leetcode-analysis/`. After installation, run **Developer: Reload Window** from
+the VS Code Command Palette. Open any `.cpp` or `.md` problem file; the Run, Debug, and sparkle
+Analyze buttons should appear in the editor title bar and status bar.
+
 ## Running
 
 ```sh

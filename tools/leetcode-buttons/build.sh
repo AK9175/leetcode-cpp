@@ -3,6 +3,13 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$HERE/package.json")"
+
+# Install the same analysis skill for both supported local CLIs.
+for SKILL_ROOT in "$HOME/.claude/skills/leetcode-analysis" "$HOME/.codex/skills/leetcode-analysis"; do
+    mkdir -p "$SKILL_ROOT"
+    cp "$HERE/analysis-skill/SKILL.md" "$SKILL_ROOT/SKILL.md"
+done
+
 TMP="$(mktemp -d)"
 mkdir -p "$TMP/extension"
 cp "$HERE/package.json" "$HERE/extension.js" "$TMP/extension/"

@@ -262,7 +262,7 @@ function activate(context) {
         ['$(play) Run all tests', 'leetcode.runAll'],
         ['$(debug-step-into) Run test #', 'leetcode.runOne'],
         ['$(debug-alt) Debug', 'leetcode.debug'],
-        ['$(beaker) Analyze', 'leetcode.analyze'],
+        ['$(sparkle) Analyze', 'leetcode.analyze'],
     ].map(([text, command], i) => {
         const item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100 - i);
         item.text = text;
