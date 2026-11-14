@@ -36,28 +36,41 @@ public:
 
         deque<int> dq;
         long long left = 0, right = 0;
-        while(right < n){
-            while(!dq.empty() && nums[dq.back()] < nums[right]){
+        while (right < n) {
+
+            while (!dq.empty() &&
+                nums[dq.back()] < nums[right]) {
                 dq.pop_back();
             }
-            dq.push_back(right);
 
-            //Shrink Left if it is invalid
-            while(true){
-                while(!dq.empty() && left > dq.front()){
+            dq.push_back(right);
+            while (!dq.empty() &&
+                dq.front() < left) {
+                dq.pop_front();
+            }
+
+            int maxIndex = dq.front();
+
+            long long targetSum = sumOfRunningMax[left] - sumOfRunningMax[maxIndex] + 1LL * nums[maxIndex] * (right - maxIndex + 1);
+
+            long long actualSum = prefixsum[right + 1] - prefixsum[left];
+
+            long long cost = targetSum - actualSum;
+
+            while (cost > k) {
+                left++;
+
+                while (dq.front() < left) {
                     dq.pop_front();
                 }
-                int maxIndex = dq.front();
 
-                long long targetSum = sumOfRunningMax[left] - sumOfRunningMax[maxIndex] + (long long)nums[maxIndex]*(right - maxIndex + 1);
+                maxIndex = dq.front();
 
-                long long actualWindowSum = prefixsum[right+1] - prefixsum[left];
+                targetSum = sumOfRunningMax[left] - sumOfRunningMax[maxIndex] + 1LL * nums[maxIndex] * (right - maxIndex + 1);
 
-                long long cost = targetSum - actualWindowSum;
+                actualSum = prefixsum[right + 1] - prefixsum[left];
 
-                if(cost <= k) break; //If its still valid break out of this and increment on right
-
-                left++;
+                cost = targetSum - actualSum;
             }
 
             ans += right - left + 1;
@@ -66,6 +79,5 @@ public:
         }
 
         return ans;
-
     }
 };
