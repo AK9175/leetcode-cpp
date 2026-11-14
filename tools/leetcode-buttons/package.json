@@ -1,9 +1,9 @@
 {
     "name": "leetcode-buttons",
     "displayName": "LeetCode Buttons",
-    "description": "Run all tests / debug buttons for the local LeetCode C++ workspace.",
+    "description": "Run, debug, and analyze solutions in the local LeetCode C++ workspace.",
     "publisher": "local",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "engines": {
         "vscode": "^1.80.0"
     },
@@ -28,6 +28,11 @@
                 "command": "leetcode.debug",
                 "title": "LeetCode: Debug\u2026",
                 "icon": "$(debug-alt)"
+            },
+            {
+                "command": "leetcode.analyze",
+                "title": "LeetCode: Analyze",
+                "icon": "$(beaker)"
             },
             {
                 "command": "leetcode.openProblem",
@@ -58,13 +63,18 @@
                     "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
                 },
                 {
-                    "command": "leetcode.openProblem",
+                    "command": "leetcode.analyze",
                     "group": "navigation@3",
                     "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
                 },
                 {
-                    "command": "leetcode.openTests",
+                    "command": "leetcode.openProblem",
                     "group": "navigation@4",
+                    "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
+                },
+                {
+                    "command": "leetcode.openTests",
+                    "group": "navigation@5",
                     "when": "resourcePath =~ /leetcode_cpp/ && resourceExtname =~ /^\\.(cpp|md)$/"
                 }
             ]

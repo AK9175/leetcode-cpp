@@ -6,6 +6,9 @@ VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["vers
 TMP="$(mktemp -d)"
 mkdir -p "$TMP/extension"
 cp "$HERE/package.json" "$HERE/extension.js" "$TMP/extension/"
+cp "$HERE/analyze.sh" "$TMP/extension/"
+mkdir -p "$TMP/extension/analysis-skill"
+cp "$HERE/analysis-skill/SKILL.md" "$TMP/extension/analysis-skill/"
 cat > "$TMP/[Content_Types].xml" <<'XML'
 <?xml version="1.0" encoding="utf-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".js" ContentType="application/javascript"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>

@@ -38,4 +38,26 @@ Force-included into every build, so solution files need no `#include`s of their 
 ## tools/leetcode-buttons
 
 A small local VS Code extension adding editor-title and status-bar buttons: run all tests, run a
-single test, debug, open the problem description, open the tests. Run its `build.sh` after editing.
+single test, debug, analyze the active solution, open the problem description, and open the tests.
+Run its `build.sh` after editing.
+
+### Solution analysis
+
+The **Analyze** button asks whether to run the shared analysis skill with Claude or Codex. It
+opens the selected CLI in the VS Code integrated terminal, compiles the active problem's tests
+with `clang++ -O2` and without sanitizers, runs the complete hidden test suite, and supplies the
+results to the analysis skill. The report covers expected and actual time/space complexity,
+correctness observations, measured wall time, and peak memory, followed by one or two concise
+optimization suggestions.
+
+Reports are saved for future use under `Questions/<Problem Title>/`:
+
+```
+Questions/Sliding Window/Subarrays with K Different Integers/analysis.codex.md
+Questions/Sliding Window/Subarrays with K Different Integers/analysis.claude.md
+```
+
+If the problem, solution, tests, benchmark settings, and provider are unchanged, Analyze opens
+the cached report without invoking a model again. The report is shown in a separate formatted
+Webview panel with a Close button. Claude Code and Codex must be installed and authenticated
+locally for their respective options.
