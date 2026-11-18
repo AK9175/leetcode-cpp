@@ -9,6 +9,15 @@ Analyze the active problem using the solution `.cpp`, problem `.md`, hidden test
 
 Do not edit, rewrite, or format any repository file. Do not provide a full replacement implementation unless the user explicitly asks for one.
 
+## Formatting rules
+
+The report is shown in a lightweight Markdown viewer that does **not** render LaTeX. Write plain GitHub-flavored Markdown only.
+
+- Do not use LaTeX or math delimiters: no `\(...\)`, `\[...\]`, `\left`, `\right`, `\sum`, `\Theta`, `\tau`, `\log`, `\,`, `\cdot`, etc.
+- Write complexity in plain ASCII: `O(n^3 log n + k*n^2)`, `O(n^2)`, `k <= n/2`. Use `^` for exponents and `*` for multiplication.
+- Summations and similar may be written in words (e.g. "sum over L from 2 to n of ...") or left out; keep it readable as plain text.
+- Keep math inside backticks when it helps, e.g. `` `O(n^2)` ``.
+
 Return concise Markdown with these sections:
 
 ## Complexity

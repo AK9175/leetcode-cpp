@@ -61,10 +61,42 @@ function escapeHtml(value) {
     }[ch]));
 }
 
+// Turn common LaTeX fragments into readable plain text. The viewer has no math
+// engine, so we normalise rather than render: strip delimiters/sizing/spacing
+// commands and map a handful of symbols. A trailing letter-lookahead keeps
+// multi-letter commands (\left vs \le) from clobbering each other while still
+// matching when a non-letter like _ or { follows (e.g. \sum_{...}).
+function normalizeMath(text) {
+    return text
+        // math delimiters \( \) \[ \] — drop them; don't leave stray parens/brackets
+        .replace(/\\[()[\]]/g, '')
+        // sizing wrappers
+        .replace(/\\(?:left|right|big[lr]?|bigg[lr]?)(?![a-zA-Z])/g, '')
+        // spacing commands: \quad \qquad and \, \; \: \! \<space>
+        .replace(/\\(?:quad|qquad)(?![a-zA-Z])/g, '  ')
+        .replace(/\\[,;:! ]/g, ' ')
+        // symbols & operators (letter-lookahead so \le does not match \left)
+        .replace(/\\Theta(?![a-zA-Z])/g, 'Θ')
+        .replace(/\\Omega(?![a-zA-Z])/g, 'Ω')
+        .replace(/\\Delta(?![a-zA-Z])/g, 'Δ')
+        .replace(/\\alpha(?![a-zA-Z])/g, 'α')
+        .replace(/\\beta(?![a-zA-Z])/g, 'β')
+        .replace(/\\tau(?![a-zA-Z])/g, 'τ')
+        .replace(/\\sum(?![a-zA-Z])/g, 'Σ')
+        .replace(/\\prod(?![a-zA-Z])/g, 'Π')
+        .replace(/\\log(?![a-zA-Z])/g, 'log')
+        .replace(/\\sqrt(?![a-zA-Z])/g, '√')
+        .replace(/\\cdot(?![a-zA-Z])/g, '·')
+        .replace(/\\times(?![a-zA-Z])/g, '×')
+        .replace(/\\leq?(?![a-zA-Z])/g, '≤')
+        .replace(/\\geq?(?![a-zA-Z])/g, '≥')
+        .replace(/\\in(?![a-zA-Z])/g, '∈')
+        .replace(/\\to(?![a-zA-Z])/g, '→')
+        .replace(/\\infty(?![a-zA-Z])/g, '∞');
+}
+
 function inlineHtml(value) {
-    let text = value
-        .replace(/\\\(/g, '(')
-        .replace(/\\\)/g, ')');
+    let text = normalizeMath(value);
     const tokens = [];
     const protect = html => {
         tokens.push(html);
@@ -72,16 +104,12 @@ function inlineHtml(value) {
     };
 
     text = text
-        .replace(/\\Theta/g, 'Θ')
-        .replace(/\\Omega/g, 'Ω')
-        .replace(/\\Delta/g, 'Δ')
-        .replace(/\\leq?/g, '≤')
-        .replace(/\\geq?/g, '≥')
-        .replace(/\\cdot/g, '·')
-        .replace(/\\times/g, '×')
-        .replace(/\\in/g, '∈')
         .replace(/([A-Za-z0-9)\]])\^\{([^{}]+)\}/g, (_, base, exponent) => `${base}${protect(`<sup>${escapeHtml(exponent)}</sup>`)}`)
-        .replace(/\^\{([^{}]+)\}/g, (_, exponent) => protect(`<sup>${escapeHtml(exponent)}</sup>`));
+        .replace(/\^\{([^{}]+)\}/g, (_, exponent) => protect(`<sup>${escapeHtml(exponent)}</sup>`))
+        .replace(/\^([A-Za-z0-9])/g, (_, exponent) => protect(`<sup>${escapeHtml(exponent)}</sup>`))
+        .replace(/([A-Za-z0-9)\]])_\{([^{}]+)\}/g, (_, base, sub) => `${base}${protect(`<sub>${escapeHtml(sub)}</sub>`)}`)
+        .replace(/_\{([^{}]+)\}/g, (_, sub) => protect(`<sub>${escapeHtml(sub)}</sub>`));
+    // drop any remaining backslash commands (\frac, \text, stray escapes)
     text = text.replace(/\\/g, '');
 
     text = text.replace(/`([^`]+)`/g, (_, content) => {
@@ -100,13 +128,30 @@ function markdownHtml(markdown) {
     let html = '';
     let inList = false;
     let inCode = false;
+    let mathLines = null;
     for (const raw of lines) {
+        const trimmed = raw.trim();
         if (raw.trim().startsWith('```')) {
             html += inCode ? '</code></pre>' : '<pre><code>';
             inCode = !inCode;
             continue;
         }
         if (inCode) { html += escapeHtml(raw) + '\n'; continue; }
+        // display math block delimited by lines of just \[ ... \]
+        if (mathLines !== null) {
+            if (trimmed === '\\]') {
+                html += `<div class="math">${inlineHtml(mathLines.join(' '))}</div>`;
+                mathLines = null;
+            } else {
+                mathLines.push(trimmed);
+            }
+            continue;
+        }
+        if (trimmed === '\\[') {
+            if (inList) { html += '</ul>'; inList = false; }
+            mathLines = [];
+            continue;
+        }
         const line = inlineHtml(raw);
         if (!line.trim()) {
             if (inList) { html += '</ul>'; inList = false; }
@@ -125,6 +170,7 @@ function markdownHtml(markdown) {
             html += `<p>${line}</p>`;
         }
     }
+    if (mathLines !== null) html += `<div class="math">${inlineHtml(mathLines.join(' '))}</div>`;
     if (inList) html += '</ul>';
     if (inCode) html += '</code></pre>';
     return html;
@@ -144,6 +190,7 @@ header { position: sticky; top: 0; background: var(--vscode-editor-background); 
 h1,h2,h3 { font-weight: 600; } h1 { font-size: 1.35em; } h2 { margin-top: 26px; font-size: 1.1em; }
 code { background: var(--vscode-textCodeBlock-background); padding: 1px 4px; border-radius: 3px; }
 pre { padding: 12px; overflow: auto; background: var(--vscode-textCodeBlock-background); }
+.math { margin: 10px 0; padding: 8px 12px; overflow-x: auto; font-family: var(--vscode-editor-font-family, monospace); background: var(--vscode-textCodeBlock-background); border-radius: 4px; }
 button { float: right; color: var(--vscode-button-foreground); background: var(--vscode-button-background); border: 0; padding: 5px 12px; cursor: pointer; border-radius: 3px; }
 </style></head><body><header><button id="close">Close</button><strong>${escapeHtml(title)} · ${escapeHtml(provider)}</strong></header>${markdownHtml(markdown)}
 <script>const vscode = acquireVsCodeApi(); document.getElementById('close').onclick = () => vscode.postMessage({command:'close'});</script>
