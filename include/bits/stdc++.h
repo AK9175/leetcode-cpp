@@ -55,6 +55,29 @@
 #include <utility>
 #include <variant>
 
+// Concurrency (needed for thread-safe design problems; guarded)
+#if __has_include(<atomic>)
+#include <atomic>
+#endif
+#if __has_include(<mutex>)
+#include <mutex>
+#endif
+#if __has_include(<shared_mutex>)
+#include <shared_mutex>
+#endif
+#if __has_include(<condition_variable>)
+#include <condition_variable>
+#endif
+#if __has_include(<thread>)
+#include <thread>
+#endif
+#if __has_include(<future>)
+#include <future>
+#endif
+#if __has_include(<semaphore>)
+#include <semaphore>
+#endif
+
 // C++20 / C++23 (guarded)
 #if __has_include(<bit>)
 #include <bit>
